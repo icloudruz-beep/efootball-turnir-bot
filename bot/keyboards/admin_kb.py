@@ -14,8 +14,31 @@ def admin_main_kb() -> ReplyKeyboardMarkup:
     builder.row(KeyboardButton(text="📋 Turnirlar ro'yxati"))
     builder.row(KeyboardButton(text="▶️ Qabulni ochish"), KeyboardButton(text="🎲 Qurani boshlash"))
     builder.row(KeyboardButton(text="📊 Ishtirokchilar"), KeyboardButton(text="🏁 Turnirni tugatish"))
-    builder.row(KeyboardButton(text="Shikoyatlar 📥"))
+    builder.row(KeyboardButton(text="Homiylar 📢"), KeyboardButton(text="Shikoyatlar 📥"))
     return builder.as_markup(resize_keyboard=True)
+
+
+def sponsor_menu_kb() -> InlineKeyboardMarkup:
+    """Homiylar boshqaruv menyusi."""
+    builder = InlineKeyboardBuilder()
+    builder.row(InlineKeyboardButton(text="➕ Homiy qo'shish", callback_data="sponsor_add"))
+    builder.row(InlineKeyboardButton(text="➖ Homiyni o'chirish", callback_data="sponsor_remove_list"))
+    builder.row(InlineKeyboardButton(text="📋 Homiylar ro'yxati", callback_data="sponsor_list"))
+    return builder.as_markup()
+
+
+def sponsor_delete_kb(sponsors: list) -> InlineKeyboardMarkup:
+    """O'chirish uchun homiylar ro'yxati."""
+    builder = InlineKeyboardBuilder()
+    for s in sponsors:
+        builder.row(
+            InlineKeyboardButton(
+                text=f"❌ {s['channel_name']}",
+                callback_data=f"sponsor_del:{s['id']}",
+            )
+        )
+    builder.row(InlineKeyboardButton(text="🔙 Orqaga", callback_data="sponsor_back"))
+    return builder.as_markup()
 
 
 def payment_approval_kb(participant_id: int) -> InlineKeyboardMarkup:
