@@ -15,6 +15,7 @@ def user_main_kb(has_registration: bool = False) -> ReplyKeyboardMarkup:
         builder.row(KeyboardButton(text="📊 Mening o'yinlarim"))
         builder.row(KeyboardButton(text="📤 Natija yuborish"))
     builder.row(KeyboardButton(text="ℹ️ Turnir haqida"))
+    builder.row(KeyboardButton(text="Shikoyat qilish ⚠️"))
     return builder.as_markup(resize_keyboard=True)
 
 
@@ -49,3 +50,11 @@ def match_select_kb(matches: list) -> InlineKeyboardMarkup:
             )
         )
     return builder.as_markup()
+
+
+def complaint_skip_kb() -> ReplyKeyboardMarkup:
+    """Shikoyatda skrinshot o'tkazib yuborish tugmasi."""
+    builder = ReplyKeyboardBuilder()
+    builder.row(KeyboardButton(text="⏭ Skrinshot o'tkazib yuborish"))
+    builder.row(KeyboardButton(text="❌ Bekor qilish"))
+    return builder.as_markup(resize_keyboard=True)
