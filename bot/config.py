@@ -13,3 +13,4 @@ ASSETS_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
