@@ -1,6 +1,6 @@
 [build]
-builder = "nixpacks"
-buildCommand = "pip install --break-system-packages -r requirements.txt"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 startCommand = "python main.py"
