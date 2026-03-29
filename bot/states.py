@@ -21,3 +21,17 @@ class ResultSubmission(StatesGroup):
     select_match = State()
     score = State()
     screenshot = State()
+
+
+class AIAnnouncementCreation(StatesGroup):
+    waiting_input = State()
+    confirming = State()
+
+
+class ComplaintSubmission(StatesGroup):
+    text = State()
+    screenshot = State()
+
+
+class AdminComplaintReply(StatesGroup):
+    reply_text = State()
