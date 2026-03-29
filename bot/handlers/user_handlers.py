@@ -37,7 +37,7 @@ def get_main_kb(has_reg: bool):
 
 
 @router.message(Command("start"))
-async def user_start(message: Message, state: FSMContext):
+async def user_start(message: Message, state: FSMContext, bot: Bot):
     from bot.config import ADMIN_IDS
     if message.from_user.id in ADMIN_IDS:
         return
@@ -53,6 +53,12 @@ async def user_start(message: Message, state: FSMContext):
 
     participant = await get_participant_by_user(tournament["id"], message.from_user.id)
     has_reg = participant is not None and participant["payment_status"] in ("approved", "free")
+
+    # Majburiy obuna tekshiruvi
+    from bot.handlers.sponsor_handlers import check_subscriptions_and_notify
+    subscribed = await check_subscriptions_and_notify(message, bot, message.from_user.id, "start")
+    if not subscribed:
+        return
 
     payment_info = f"To'lovli ({tournament['price']:,.0f} so'm)" if tournament["is_paid"] else "Bepul"
     reg_status = "Siz ro'yxatdan o'tgansiz! ✅" if has_reg else "Ro'yxatdan o'tish uchun tugmani bosing."
@@ -95,7 +101,7 @@ async def tournament_info(message: Message):
 
 
 @router.message(F.text == "📝 Ro'yxatdan o'tish")
-async def start_registration(message: Message, state: FSMContext):
+async def start_registration(message: Message, state: FSMContext, bot: Bot):
     tournament = await get_active_tournament()
     if not tournament:
         await message.answer("⚠️ Hozirda faol turnir yo'q.")
@@ -116,6 +122,12 @@ async def start_registration(message: Message, state: FSMContext):
     approved = await count_approved_participants(tournament["id"])
     if approved >= tournament["max_participants"]:
         await message.answer("⚠️ Turnir to'ldi. Ro'yxatdan o'tib bo'lmaydi.")
+        return
+
+    # Majburiy obuna tekshiruvi
+    from bot.handlers.sponsor_handlers import check_subscriptions_and_notify
+    subscribed = await check_subscriptions_and_notify(message, bot, message.from_user.id, "register")
+    if not subscribed:
         return
 
     await state.set_state(PlayerRegistration.game_id)
