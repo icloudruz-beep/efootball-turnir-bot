@@ -35,3 +35,9 @@ class ComplaintSubmission(StatesGroup):
 
 class AdminComplaintReply(StatesGroup):
     reply_text = State()
+
+
+class SponsorAdd(StatesGroup):
+    channel_id = State()
+    channel_name = State()
+    channel_link = State()
