@@ -10,9 +10,11 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder, ReplyKeyboardBuilder
 def admin_main_kb() -> ReplyKeyboardMarkup:
     builder = ReplyKeyboardBuilder()
     builder.row(KeyboardButton(text="🏆 Turnir yaratish"))
+    builder.row(KeyboardButton(text="🤖 AI E'lon yaratish"))
     builder.row(KeyboardButton(text="📋 Turnirlar ro'yxati"))
     builder.row(KeyboardButton(text="▶️ Qabulni ochish"), KeyboardButton(text="🎲 Qurani boshlash"))
     builder.row(KeyboardButton(text="📊 Ishtirokchilar"), KeyboardButton(text="🏁 Turnirni tugatish"))
+    builder.row(KeyboardButton(text="Shikoyatlar 📥"))
     return builder.as_markup(resize_keyboard=True)
 
 
@@ -63,5 +65,42 @@ def dispute_kb(match_id: int) -> InlineKeyboardMarkup:
             text="🔄 Qayta o'ynatish",
             callback_data=f"admin_replay:{match_id}",
         ),
+    )
+    return builder.as_markup()
+
+
+def ai_confirm_kb() -> InlineKeyboardMarkup:
+    """AI tomonidan yaratilgan e'lonni tasdiqlash yoki qayta kiritish uchun tugmalar."""
+    builder = InlineKeyboardBuilder()
+    builder.row(
+        InlineKeyboardButton(text="✅ Tasdiqlash", callback_data="ai_confirm"),
+        InlineKeyboardButton(text="🔄 Qaytadan kiritish", callback_data="ai_retry"),
+    )
+    builder.row(
+        InlineKeyboardButton(text="📢 Ishtirokchilarga yuborish", callback_data="ai_broadcast"),
+    )
+    return builder.as_markup()
+
+
+def complaint_action_kb(complaint_id: int, user_id: int) -> InlineKeyboardMarkup:
+    """Shikoyat uchun admin harakatlar tugmalari."""
+    builder = InlineKeyboardBuilder()
+    builder.row(
+        InlineKeyboardButton(
+            text="💬 Javob yozish",
+            callback_data=f"complaint_reply:{complaint_id}:{user_id}",
+        )
+    )
+    builder.row(
+        InlineKeyboardButton(
+            text="🚫 Aybdorni chetlatish (Ban)",
+            callback_data=f"complaint_ban:{complaint_id}:{user_id}",
+        )
+    )
+    builder.row(
+        InlineKeyboardButton(
+            text="✅ Yopish (O'qildi)",
+            callback_data=f"complaint_close:{complaint_id}",
+        )
     )
     return builder.as_markup()
