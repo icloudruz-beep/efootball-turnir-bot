@@ -13,7 +13,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from bot.config import BOT_TOKEN
 from bot.db.database import init_db
 from bot.handlers import admin_handlers, user_handlers, common_handlers
-from bot.handlers import admin_ai_handlers, complaints_handlers
+from bot.handlers import admin_ai_handlers, complaints_handlers, sponsor_handlers
 
 
 async def main():
@@ -42,6 +42,7 @@ async def main():
     dp.include_router(admin_handlers.router)
     dp.include_router(admin_ai_handlers.router)
     dp.include_router(complaints_handlers.router)
+    dp.include_router(sponsor_handlers.router)
     dp.include_router(user_handlers.router)
     dp.include_router(common_handlers.router)
 
