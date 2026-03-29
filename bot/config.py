@@ -10,3 +10,6 @@ ADMIN_IDS = [int(x.strip()) for x in ADMIN_IDS_RAW.split(",") if x.strip().isdig
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "efootball.db")
 FONTS_DIR = os.path.join(os.path.dirname(__file__), "..", "fonts")
 ASSETS_DIR = os.path.join(os.path.dirname(__file__), "..", "assets")
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
