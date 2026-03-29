@@ -27,6 +27,8 @@ async def init_db():
                 card_number TEXT DEFAULT '',
                 status TEXT NOT NULL DEFAULT 'draft'
                     CHECK(status IN ('draft','registration','started','finished')),
+                rules TEXT DEFAULT '',
+                announcement TEXT DEFAULT '',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -45,6 +47,7 @@ async def init_db():
                 payment_screenshot_file_id TEXT DEFAULT '',
                 group_name TEXT DEFAULT '',
                 seed INTEGER DEFAULT 0,
+                is_banned INTEGER NOT NULL DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 UNIQUE(tournament_id, user_id)
             )
@@ -70,5 +73,44 @@ async def init_db():
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS complaints (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                username TEXT DEFAULT '',
+                full_name TEXT DEFAULT '',
+                text TEXT NOT NULL,
+                screenshot_file_id TEXT DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'unread'
+                    CHECK(status IN ('unread', 'read', 'replied', 'banned')),
+                admin_reply TEXT DEFAULT '',
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        await db.execute("""
+            CREATE TABLE IF NOT EXISTS banned_users (
+                user_id INTEGER PRIMARY KEY,
+                reason TEXT DEFAULT '',
+                banned_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        # Mavjud tournaments jadvaliga ustunlar qo'shish (agar yo'q bo'lsa)
+        try:
+            await db.execute("ALTER TABLE tournaments ADD COLUMN rules TEXT DEFAULT ''")
+        except Exception:
+            pass
+        try:
+            await db.execute("ALTER TABLE tournaments ADD COLUMN announcement TEXT DEFAULT ''")
+        except Exception:
+            pass
+
+        # Mavjud participants jadvaliga is_banned ustuni qo'shish
+        try:
+            await db.execute("ALTER TABLE participants ADD COLUMN is_banned INTEGER NOT NULL DEFAULT 0")
+        except Exception:
+            pass
 
         await db.commit()
